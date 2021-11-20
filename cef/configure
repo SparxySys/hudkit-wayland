@@ -10,8 +10,4 @@ if [[ ! -e 'cef-project/build' ]]; then
     tar xf tmp.tar.bz2
     mv cef_binary_*/* ./
     rmdir cef_binary_*
-    mkdir build
-    cd build
-    cmake ..
-    make
 fi
