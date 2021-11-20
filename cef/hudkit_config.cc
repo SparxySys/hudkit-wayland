@@ -41,15 +41,13 @@ HudkitConfig::HudkitConfig(std::string file)
     std::stringstream configStringStream;
     configStringStream << configFileStream.rdbuf();
 
-    cef_json_parser_error_t errorCode;
     CefString errorMessage;
 
-    jsonPointer = CefParseJSONAndReturnError(configStringStream.str(), cef_json_parser_options_t::JSON_PARSER_ALLOW_TRAILING_COMMAS, errorCode, errorMessage);
+    jsonPointer = CefParseJSONAndReturnError(configStringStream.str(), cef_json_parser_options_t::JSON_PARSER_ALLOW_TRAILING_COMMAS, errorMessage);
     if (jsonPointer.get() == NULL || !jsonPointer->IsValid() || jsonPointer->GetType() != VTYPE_DICTIONARY || jsonPointer->IsOwned())
     {
         std::cerr << "Failed to parse config file at " << file << "!" << std::endl
                   << std::endl;
-        std::cerr << "Error code: " << errorCode << std::endl;
         std::cerr << "Error message:" << std::endl
                   << errorMessage.c_str() << std::endl;
         exit(1);

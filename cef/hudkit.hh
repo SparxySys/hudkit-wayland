@@ -15,13 +15,11 @@ public:
     virtual ~Hudkit();
 
     // CefApp methods:
-    virtual CefRefPtr<CefBrowserProcessHandler> GetBrowserProcessHandler()
-        OVERRIDE
+    virtual CefRefPtr<CefBrowserProcessHandler> GetBrowserProcessHandler() override
     {
         return this;
     }
-    virtual void OnBeforeCommandLineProcessing(const CefString &process_type, CefRefPtr<CefCommandLine> command_line)
-        OVERRIDE
+    virtual void OnBeforeCommandLineProcessing(const CefString &process_type, CefRefPtr<CefCommandLine> command_line) override
     {
         //Ignore the audio issues
         command_line->AppendSwitchWithValue("autoplay-policy", "no-user-gesture-required");
@@ -32,7 +30,7 @@ public:
     }
 
     // CefBrowserProcessHandler methods:
-    virtual void OnContextInitialized() OVERRIDE;
+    virtual void OnContextInitialized() override;
     void Run();
 
     HudkitInstance* GetInstance(CefRefPtr<CefBrowser> browser);

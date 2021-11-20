@@ -157,7 +157,7 @@ void BrowserHandler::CloseAllBrowsers(bool force_close)
   if (!CefCurrentlyOn(TID_UI))
   {
     // Execute on the UI thread.
-    CefPostTask(TID_UI, base::Bind(&BrowserHandler::CloseAllBrowsers, this,
+    CefPostTask(TID_UI, base::BindOnce(&BrowserHandler::CloseAllBrowsers, this,
                                    force_close));
     return;
   }

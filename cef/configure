@@ -1,15 +1,15 @@
 #!/bin/bash
 
-CEF_BUILD='cef_binary_81.2.15+ge07275d+chromium-81.0.4044.92_linux64'
+CEF_BUILD='cef_binary_95.7.18+g0d6005e+chromium-95.0.4638.69_linux64'
 
 if [[ ! -e 'cef-project/build' ]]; then
     CEF_BUILD_ESCAPED="$(echo "$CEF_BUILD" | sed -e 's/+/%2B/g')"
     mkdir 'cef-project' &> /dev/null
-    curl -ocef-project/tmp.tar.bz2 "http://opensource.spotify.com/cefbuilds/${CEF_BUILD_ESCAPED}.tar.bz2" &> /dev/null
+    curl -ocef-project/tmp.tar.bz2 "https://cef-builds.spotifycdn.com/${CEF_BUILD_ESCAPED}.tar.bz2"
     cd cef-project
     tar xf tmp.tar.bz2
-    mv "${CEF_BUILD}/*" ./
-    rmdir "${CEF_BUILD}"
+    mv cef_binary_*/* ./
+    rmdir cef_binary_*
     mkdir build
     cd build
     cmake ..
