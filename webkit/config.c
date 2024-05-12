@@ -9,7 +9,8 @@
 
 char *configFilePath;
 
-int x, y, width, height;
+int x, y, width, height, monitor;
+double zoom;
 char title[TITLE_MAX_LENGTH];
 char url[URL_MAX_LENGTH];
 char hotkey[HOTKEY_MAX_LENGTH];
@@ -41,6 +42,29 @@ int get_config_value_int(json_object *object, char *key)
     }
 
     return json_object_get_int(prop);
+}
+
+double get_config_value_double(json_object *object, char *key)
+{
+    json_object *prop;
+    bool result;
+    json_type type;
+
+    result = json_object_object_get_ex(object, key, &prop);
+    if (!result)
+    {
+        fprintf(stderr, "No property \"%s\" in config object, aborting.\n\n", key);
+        exit(1);
+    }
+
+    type = json_object_get_type(prop);
+    if (type != json_type_double)
+    {
+        fprintf(stderr, "Property \"%s\" was %s, expected double, aborting.\n\n", key, json_type_to_name(type));
+        exit(1);
+    }
+
+    return json_object_get_double(prop);
 }
 
 void get_config_value_string(json_object *object, char *key, char *buffer, int length)
@@ -90,6 +114,9 @@ void read_config(char *src)
         y = get_config_value_int(config, "y");
         width = get_config_value_int(config, "width");
         height = get_config_value_int(config, "height");
+        monitor = get_config_value_int(config, "monitor");
+        zoom = get_config_value_double(config, "zoom");
+
 
         get_config_value_string(config, "title", title, TITLE_MAX_LENGTH);
         get_config_value_string(config, "url", url, URL_MAX_LENGTH);
@@ -107,7 +134,7 @@ void read_config(char *src)
         }
         fprintf(stderr, "Creating a new default config file for you to customize at:\n%s\n", src);
         FILE *f = fopen(src, "w");
-        fprintf(f, "{\"title\":\"example overlay\",\"url\":\"file:///path/to/file.html?OVERLAY_WS=ws://127.0.0.1:10501/ws\",\"x\":100,\"y\":100,\"width\":200,\"height\":200,\"hotkey\":\"<Ctrl>L\"}");
+        fprintf(f, "{\"title\":\"example overlay\",\"url\":\"file:///path/to/file.html?OVERLAY_WS=ws://127.0.0.1:10501/ws\",\"x\":100,\"y\":100,\"width\":200,\"height\":200,\"monitor\":0,\"zoom\":1.0,\"hotkey\":\"<Ctrl>L\"}");
         fflush(f);
         fclose(f);
         exit(1);
@@ -116,10 +143,5 @@ void read_config(char *src)
 
 void write_config()
 {
-    set_config_value_int(config, "x", x);
-    set_config_value_int(config, "y", y);
-    set_config_value_int(config, "width", width);
-    set_config_value_int(config, "height", height);
-
-    json_object_to_file(configFilePath, config);
+   json_object_to_file(configFilePath, config);
 }
