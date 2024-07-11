@@ -24,6 +24,8 @@ make
     "y":100, // Y position to display overlay at
     "width":200, // Width of overlay
     "height":200, // Height of overlay
+    "monitor": 0, // on which display to render
+    "zoom": 1.0, // zoom level of browser, float
     "hotkey":"<Ctrl>L" // Hotkey to lock/unlock the overlay
 }
 ```
